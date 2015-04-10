@@ -1,0 +1,5 @@
+from solver import Solver
+
+if __name__ == "__main__":
+	s = Solver()
+	s.display(s.solve(s.example))

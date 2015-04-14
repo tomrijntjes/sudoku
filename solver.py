@@ -20,7 +20,36 @@ class Solver:
 		  ".51|6..|28."
 		  ".4.|.52|9.."
 		  "..2|...|64." )
-		self.example2 = '4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......' 
+		self.example2 = '4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......'
+			#every square can take only one value
+		V = And(*[
+			    And(*[
+				OneHot(*[ self.X[r, c, v]
+				    for v in range(1, 10) ])
+				for c in range(1, 10) ])
+			    for r in range(1, 10) ])
+			#every square in each row is unique
+		R = And(*[
+			    And(*[
+				OneHot(*[ self.X[r, c, v]
+				    for c in range(1, 10) ])
+				for v in range(1, 10) ])
+			    for r in range(1, 10) ])
+			#every square in each column is unique
+		C = And(*[
+			    And(*[
+				OneHot(*[ self.X[r, c, v]
+				    for r in range(1, 10) ])
+				for v in range(1, 10) ])
+			    for c in range(1, 10) ])
+			#every square in a box is unique
+		B = And(*[
+		    And(*[
+			OneHot(*[ self.X[3*br+r, 3*bc+c, v]
+			    for r in range(1, 4) for c in range(1, 4) ])
+			for v in range(1, 10) ])
+		    for br in range(3) for bc in range(3) ])
+		self.S = And(V, R, C, B) 
 
 	
 	def parse_grid(self,grid):
@@ -60,36 +89,7 @@ class Solver:
 	@timeit
 	def solve(self,grid):
 		with self.parse_grid(grid):
-			#every square can take only one value
-			V = And(*[
-			    And(*[
-				OneHot(*[ self.X[r, c, v]
-				    for v in range(1, 10) ])
-				for c in range(1, 10) ])
-			    for r in range(1, 10) ])
-			#every square in each row is unique
-			R = And(*[
-			    And(*[
-				OneHot(*[ self.X[r, c, v]
-				    for c in range(1, 10) ])
-				for v in range(1, 10) ])
-			    for r in range(1, 10) ])
-			#every square in each column is unique
-			C = And(*[
-			    And(*[
-				OneHot(*[ self.X[r, c, v]
-				    for r in range(1, 10) ])
-				for v in range(1, 10) ])
-			    for c in range(1, 10) ])
-			#every square in a box is unique
-			B = And(*[
-		    And(*[
-			OneHot(*[ self.X[3*br+r, 3*bc+c, v]
-			    for r in range(1, 4) for c in range(1, 4) ])
-			for v in range(1, 10) ])
-		    for br in range(3) for bc in range(3) ])
-			S = And(V, R, C, B)
-			return S.satisfy_one()
+			return self.S.satisfy_one()
 
 class BoxlessSolver(Solver):
 	def __init__(self):

@@ -3,6 +3,7 @@ from solver import Solver,BoxlessSolver,DiagonalSolver
 
 s = Solver()
 
+print('hardest')
 for sudoku in open('hardest.txt'):
-	s.solve(sudoku)
-
+	print(sudoku)
+	print(s.display(s.solve(sudoku)))

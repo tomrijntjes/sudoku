@@ -186,7 +186,11 @@ def random_puzzle(N=17):
 grid1  = '003020600900305001001806400008102900700000008006708200002609500800203009005010300'
 grid2  = '4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......'
 hard1  = '.....6....59.....82....8....45........3........6..3.54...325..6..................'
-    
+
 if __name__ == '__main__':
     test()
-    solve_all([random_puzzle() for _ in range(99)], "random", 100.0)
+    with open('random.txt','w') as f:
+        puzzles = (random_puzzle() for x in range(10000))
+        for puzzle in puzzles:
+            f.write(puzzle+'\n')
+    #solve_all([random_puzzle() for _ in range(99)], "random", 100.0)

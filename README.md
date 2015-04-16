@@ -1,19 +1,15 @@
 # sudoku
 
-Usage: 
+Usage:
 
-1.install python3 and pyeda. 
-2.go to command line
-3.python3 run.py
+1.install python3
+2.install requirements from requirements.txt
+3.go to commandline
+4.python3 run.py 6000
 
-Notes:
+#method
 
-solver.py contains three different classes. Solver solves generic sudoku's, DiagonalSolver adds the rule that both diagonals must contain unique numbers.
+I generated 10k puzzles by running norvig.py based on his work hosted here http://norvig.com/sudoku.html. Then I attempted every sudoku with DiagonalSolver in solver.py and filtered unsatisfiable puzzles, resulting in diagonal.txt. Finally I ran run.py to test performance of each solver object.
 
-Norvig.py is the code copied from Peter Norvigs excellent tutorial http://norvig.com/sudoku.html
-
-All sudoku's in the .txt files originate from there too.
-
-#warning
-
-DiagonalSolver is broken
+#results
+Execute run.py to find that the diagonalsolver is slightly less performant.

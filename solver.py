@@ -50,6 +50,7 @@ class Solver:
 			for v in range(1, 10) ])
 		    for br in range(3) for bc in range(3) ])
 		self.S = And(V, R, C, B)
+		self.solve(self.example)
 
 
 	def parse_grid(self,grid):
@@ -82,7 +83,7 @@ class Solver:
 			result = f(*args, **kw)
 			te = time.clock()
 			#print("Solved one sudoku in {0} seconds".format(te-ts))
-			return result
+			return result,te-ts
 		return timed
 
 
@@ -95,6 +96,17 @@ class DiagonalSolver(Solver):
 	def __init__(self):
 		self.X = exprvars('x', (1, 10), (1, 10), (1, 10))
 		self.DIGITS = "123456789"
+		self.example = ( ".73|...|8.."
+		  "..4|13.|.5."
+		  ".85|..6|31."
+		 "---+---+---"
+		  "5..|.9.|.3."
+		  "..8|.1.|5.."
+		  ".1.|.6.|..7"
+		  "---+---+---"
+		  ".51|6..|28."
+		  ".4.|.52|9.."
+		  "..2|...|64." )
 		#every square can take only one value
 		V = And(*[
 			And(*[
@@ -125,12 +137,13 @@ class DiagonalSolver(Solver):
 		for br in range(3) for bc in range(3) ])
 		#every square in diagonal topleft-bottomright is unique
 		D1 = And(*[
-			OneHot(*[ self.X[c, c, v]
-				for v in range(1, 10) ])
+		OneHot(*[ self.X[c, c, v]
 			for c in range(1, 10) ])
+		for v in range(1, 10) ])
 		#every square in diagonal topright-bottomleft is unique
 		D2 = And(*[
-			OneHot(*[ self.X[c, 10-c, v]
+				OneHot(*[ self.X[10-c, c, v]
+					for c in range(1, 10) ])
 				for v in range(1, 10) ])
-			for c in range(1, 10) ])
 		self.S = And(V, R, C, B,D1,D2)
+		self.solve(self.example)
